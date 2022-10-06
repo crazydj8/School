@@ -1,0 +1,330 @@
+mysql> create table worker
+    -> (w_id int(3) primary key,
+    -> firstname varchar(20) not null,
+    -> lastname varchar(20) not null);
+Query OK, 0 rows affected, 1 warning (0.97 sec)
+
+mysql> alter table worker
+    -> add address varchar(30);
+Query OK, 0 rows affected (0.90 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table worker
+    -> add city varchar(20);
+Query OK, 0 rows affected (0.47 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create table desig
+    -> (w_id int(3) references worker(w_id),
+    -> salary int check(salary between 20000 and 100000),
+    -> benefits int,
+    -> designation varchar(20) check(designation in ('manager', 'director', 'clerk', 'salesman', 'analyst')));
+Query OK, 0 rows affected, 1 warning (0.47 sec)
+
+mysql> insert into worker(w_id, firstname, lastname, address, city)
+    -> values(102, 'Sam', 'Tones', '33 Elm St.', 'Paris');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into worker
+    -> values(105, 'Sarah', 'Ackerman', '440 U.S. 110', 'New York'),
+    -> (144, 'Manila', 'Sengupta', '24 Friends Street', 'New Delhi'),
+    -> (210, 'George', 'Smith', '83 First Street', 'Howard'),
+    -> (255, 'Mary', 'Jones', '842 Vine Ave.', 'Losantiville'),
+    -> (300, 'Robert', 'Samuel', '9 Fifth Cross', 'Washington'),
+    -> (355, 'Henry', 'Williams', '12Moore Street', 'Boston'),
+    -> (403, 'Ronny', 'Lee', '121 Harrison St.', 'New York'),
+    -> (451, 'Pat', 'Thompson', '11 Red Road', 'Paris');
+Query OK, 8 rows affected (0.17 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+
+mysql> select * from worker;
++------+-----------+----------+-------------------+--------------+
+| w_id | firstname | lastname | address           | city         |
++------+-----------+----------+-------------------+--------------+
+|  102 | Sam       | Tones    | 33 Elm St.        | Paris        |
+|  105 | Sarah     | Ackerman | 440 U.S. 110      | New York     |
+|  144 | Manila    | Sengupta | 24 Friends Street | New Delhi    |
+|  210 | George    | Smith    | 83 First Street   | Howard       |
+|  255 | Mary      | Jones    | 842 Vine Ave.     | Losantiville |
+|  300 | Robert    | Samuel   | 9 Fifth Cross     | Washington   |
+|  355 | Henry     | Williams | 12Moore Street    | Boston       |
+|  403 | Ronny     | Lee      | 121 Harrison St.  | New York     |
+|  451 | Pat       | Thompson | 11 Red Road       | Paris        |
++------+-----------+----------+-------------------+--------------+
+9 rows in set (0.05 sec)
+
+mysql> insert into desig
+    -> values(102, 75000, 15000, 'manager');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into desig
+    -> values(105, 85000, 25000, 'director'),
+    -> (144, 70000, 15000, 'manager'),
+    -> (210, 75000, 12500, 'manager'),
+    -> (255, 50000, 12000, 'clerk'),
+    -> (300, 45000, 10000, 'clerk'),
+    -> (335, 40000, 10000, 'clerk'),
+    -> (403, 32000, 7500, 'salesman'),
+    -> (451, 28000, 7500, 'salesman');
+Query OK, 8 rows affected (0.11 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select * from desig;
++------+--------+----------+-------------+
+| w_id | salary | benefits | designation |
++------+--------+----------+-------------+
+|  102 |  75000 |    15000 | manager     |
+|  105 |  85000 |    25000 | director    |
+|  144 |  70000 |    15000 | manager     |
+|  210 |  75000 |    12500 | manager     |
+|  255 |  50000 |    12000 | clerk       |
+|  300 |  45000 |    10000 | clerk       |
+|  335 |  40000 |    10000 | clerk       |
+|  403 |  32000 |     7500 | salesman    |
+|  451 |  28000 |     7500 | salesman    |
++------+--------+----------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> select firstname, lastname, city from worker order by city, lastname;
++-----------+----------+--------------+
+| firstname | lastname | city         |
++-----------+----------+--------------+
+| Henry     | Williams | Boston       |
+| George    | Smith    | Howard       |
+| Mary      | Jones    | Losantiville |
+| Manila    | Sengupta | New Delhi    |
+| Sarah     | Ackerman | New York     |
+| Ronny     | Lee      | New York     |
+| Pat       | Thompson | Paris        |
+| Sam       | Tones    | Paris        |
+| Robert    | Samuel   | Washington   |
++-----------+----------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from worker where city not in ('New Delhi', 'New York', 'Boston');
++------+-----------+----------+-----------------+--------------+
+| w_id | firstname | lastname | address         | city         |
++------+-----------+----------+-----------------+--------------+
+|  102 | Sam       | Tones    | 33 Elm St.      | Paris        |
+|  210 | George    | Smith    | 83 First Street | Howard       |
+|  255 | Mary      | Jones    | 842 Vine Ave.   | Losantiville |
+|  300 | Robert    | Samuel   | 9 Fifth Cross   | Washington   |
+|  451 | Pat       | Thompson | 11 Red Road     | Paris        |
++------+-----------+----------+-----------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from worker where address like '%e%';
++------+-----------+----------+-------------------+--------------+
+| w_id | firstname | lastname | address           | city         |
++------+-----------+----------+-------------------+--------------+
+|  102 | Sam       | Tones    | 33 Elm St.        | Paris        |
+|  144 | Manila    | Sengupta | 24 Friends Street | New Delhi    |
+|  210 | George    | Smith    | 83 First Street   | Howard       |
+|  255 | Mary      | Jones    | 842 Vine Ave.     | Losantiville |
+|  355 | Henry     | Williams | 12Moore Street    | Boston       |
+|  451 | Pat       | Thompson | 11 Red Road       | Paris        |
++------+-----------+----------+-------------------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from worker where address like '%street';
++------+-----------+----------+-------------------+-----------+
+| w_id | firstname | lastname | address           | city      |
++------+-----------+----------+-------------------+-----------+
+|  144 | Manila    | Sengupta | 24 Friends Street | New Delhi |
+|  210 | George    | Smith    | 83 First Street   | Howard    |
+|  355 | Henry     | Williams | 12Moore Street    | Boston    |
++------+-----------+----------+-------------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select distinct city from worker;
++--------------+
+| city         |
++--------------+
+| Paris        |
+| New York     |
+| New Delhi    |
+| Howard       |
+| Losantiville |
+| Washington   |
+| Boston       |
++--------------+
+7 rows in set (0.05 sec)
+
+mysql> select worker.firstname, worker.lastname, desig.salary*12'annual sal'
+    -> from worker inner join desig on worker.w_id = desig.w_id;
++-----------+----------+------------+
+| firstname | lastname | annual sal |
++-----------+----------+------------+
+| Sam       | Tones    |     900000 |
+| Sarah     | Ackerman |    1020000 |
+| Manila    | Sengupta |     840000 |
+| George    | Smith    |     900000 |
+| Mary      | Jones    |     600000 |
+| Robert    | Samuel   |     540000 |
+| Henry     | Williams |     480000 |
+| Ronny     | Lee      |     384000 |
+| Pat       | Thompson |     336000 |
++-----------+----------+------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from desig where salary <= 42000;
++------+--------+----------+-------------+
+| w_id | salary | benefits | designation |
++------+--------+----------+-------------+
+|  355 |  40000 |    10000 | clerk       |
+|  403 |  32000 |     7500 | salesman    |
+|  451 |  28000 |     7500 | salesman    |
++------+--------+----------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into desig
+    -> values(500, 50000, 20000, 'analyst');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select * from desig;
++------+--------+----------+-------------+
+| w_id | salary | benefits | designation |
++------+--------+----------+-------------+
+|  102 |  75000 |    15000 | manager     |
+|  105 |  85000 |    25000 | director    |
+|  144 |  70000 |    15000 | manager     |
+|  210 |  75000 |    12500 | manager     |
+|  255 |  50000 |    12000 | clerk       |
+|  300 |  45000 |    10000 | clerk       |
+|  355 |  40000 |    10000 | clerk       |
+|  403 |  32000 |     7500 | salesman    |
+|  451 |  28000 |     7500 | salesman    |
+|  500 |  50000 |    20000 | analyst     |
++------+--------+----------+-------------+
+10 rows in set (0.00 sec)
+
+mysql> alter table desig
+    -> add emp_typ varchar(15);
+Query OK, 0 rows affected (0.56 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update desig
+    -> set emp_typ = 'permanent' where designation != 'clerk';
+Query OK, 7 rows affected (0.14 sec)
+Rows matched: 7  Changed: 7  Warnings: 0
+
+mysql> update desig
+    -> set emp_typ = 'contract' where designation = 'clerk';
+Query OK, 3 rows affected (0.09 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * from desig;
++------+--------+----------+-------------+-----------+
+| w_id | salary | benefits | designation | emp_typ   |
++------+--------+----------+-------------+-----------+
+|  102 |  75000 |    15000 | manager     | permanent |
+|  105 |  85000 |    25000 | director    | permanent |
+|  144 |  70000 |    15000 | manager     | permanent |
+|  210 |  75000 |    12500 | manager     | permanent |
+|  255 |  50000 |    12000 | clerk       | contract  |
+|  300 |  45000 |    10000 | clerk       | contract  |
+|  355 |  40000 |    10000 | clerk       | contract  |
+|  403 |  32000 |     7500 | salesman    | permanent |
+|  451 |  28000 |     7500 | salesman    | permanent |
+|  500 |  50000 |    20000 | analyst     | permanent |
++------+--------+----------+-------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> select emp_typ, count(emp_typ) from desig group by emp_typ;
++-----------+----------------+
+| emp_typ   | count(emp_typ) |
++-----------+----------------+
+| permanent |              7 |
+| contract  |              3 |
++-----------+----------------+
+2 rows in set (0.00 sec)
+
+
+mysql> select emp_typ, designation, count(designation)'no. of employees' from desig group by designation;
++-----------+-------------+------------------+
+| emp_typ   | designation | no. of employees |
++-----------+-------------+------------------+
+| permanent | manager     |                3 |
+| permanent | director    |                1 |
+| contract  | clerk       |                3 |
+| permanent | salesman    |                2 |
+| permanent | analyst     |                1 |
++-----------+-------------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> select worker.w_id, worker.firstname, worker.lastname, desig.designation, worker.city from worker
+    -> inner join desig on worker.w_id = desig.w_id where worker.city in('New York', 'Paris');
++------+-----------+----------+-------------+----------+
+| w_id | firstname | lastname | designation | city     |
++------+-----------+----------+-------------+----------+
+|  102 | Sam       | Tones    | manager     | Paris    |
+|  105 | Sarah     | Ackerman | director    | New York |
+|  403 | Ronny     | Lee      | salesman    | New York |
+|  451 | Pat       | Thompson | salesman    | Paris    |
++------+-----------+----------+-------------+----------+
+4 rows in set (0.14 sec)
+
+mysql> select worker.firstname, worker.lastname, desig.designation from worker
+    -> inner join desig on worker.w_id = desig.w_id;
++-----------+----------+-------------+
+| firstname | lastname | designation |
++-----------+----------+-------------+
+| Sam       | Tones    | manager     |
+| Sarah     | Ackerman | director    |
+| Manila    | Sengupta | manager     |
+| George    | Smith    | manager     |
+| Mary      | Jones    | clerk       |
+| Robert    | Samuel   | clerk       |
+| Henry     | Williams | clerk       |
+| Ronny     | Lee      | salesman    |
+| Pat       | Thompson | salesman    |
++-----------+----------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from desig order by field(designation, 'director', 'manager', 'analyst', 'salesman', 'clerk');
++------+--------+----------+-------------+-----------+
+| w_id | salary | benefits | designation | emp_typ   |
++------+--------+----------+-------------+-----------+
+|  105 |  85000 |    25000 | director    | permanent |
+|  102 |  75000 |    15000 | manager     | permanent |
+|  144 |  70000 |    15000 | manager     | permanent |
+|  210 |  75000 |    12500 | manager     | permanent |
+|  500 |  50000 |    20000 | analyst     | permanent |
+|  403 |  32000 |     7500 | salesman    | permanent |
+|  451 |  28000 |     7500 | salesman    | permanent |
+|  255 |  50000 |    12000 | clerk       | contract  |
+|  300 |  45000 |    10000 | clerk       | contract  |
+|  355 |  40000 |    10000 | clerk       | contract  |
++------+--------+----------+-------------+-----------+
+10 rows in set (0.11 sec)
+
+mysql> select city, count(city)'no. of workers' from worker group by city;
++--------------+----------------+
+| city         | no. of workers |
++--------------+----------------+
+| Paris        |              2 |
+| New York     |              2 |
+| New Delhi    |              1 |
+| Howard       |              1 |
+| Losantiville |              1 |
+| Washington   |              1 |
+| Boston       |              1 |
++--------------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> select upper(firstname), upper(lastname), lower(firstname), lower(lastname) from worker;
++------------------+-----------------+------------------+-----------------+
+| upper(firstname) | upper(lastname) | lower(firstname) | lower(lastname) |
++------------------+-----------------+------------------+-----------------+
+| SAM              | TONES           | sam              | tones           |
+| SARAH            | ACKERMAN        | sarah            | ackerman        |
+| MANILA           | SENGUPTA        | manila           | sengupta        |
+| GEORGE           | SMITH           | george           | smith           |
+| MARY             | JONES           | mary             | jones           |
+| ROBERT           | SAMUEL          | robert           | samuel          |
+| HENRY            | WILLIAMS        | henry            | williams        |
+| RONNY            | LEE             | ronny            | lee             |
+| PAT              | THOMPSON        | pat              | thompson        |
++------------------+-----------------+------------------+-----------------+
+9 rows in set (0.15 sec)

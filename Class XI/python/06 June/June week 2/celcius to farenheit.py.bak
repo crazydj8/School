@@ -1,0 +1,7 @@
+# convert degree celsius to farenheit
+
+a = float(input("Enter the temperature in degree celsius: "))
+
+f = 9 / 5 * a + 32
+
+print("Temperature in Farenheit:", f)

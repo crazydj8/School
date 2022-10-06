@@ -1,0 +1,26 @@
+01) display mob id, company name, and price sorted on price
+02) display all the deatils, from mobstock sorted on supplier(desc) within quantity
+03) display all mobiles costing in the range 5000 to 9000
+04) show all details for samsung, micromax and sony companies
+05) show all mobile names containing character x
+06) show details of mobmaster sorted as -> sony-samsung-micromax-oppo-nokia
+07) show suppliers and mobile names supplied by them
+08) show mobiles where mobile company is 4 characters long
+09) show details of all suppliers except new vision and praveen gallery
+10) show distinct mobile ids in mobile stock table
+11) display mobile name in upper case, lowercase and length
+12) find the total qty for each mobile
+13) find average price of samsung and sony mobiles
+14) find max and min price for each mobile for each company
+15) count no. of mobile in mobmaster company wise
+16) display all companies having more than 2 models of mobiles
+17) add column catg varchar(15) to mobmaster
+	price >=25000, catg premium
+	price >=8000, catg deluxe
+	price >=2000, catg regular
+18) display all catg for which there are atleast 2 samsung mobiles
+19) show all mobiles each supplier can supply
+20) show supp name and mobile name for all suppliers
+21) modify the above query to also list mobiles that have not been supplied so far
+well well well what do we have here man?
+i dont know whats in there

@@ -1,0 +1,7 @@
+akshat,2
+ds,0
+abhay,5
+awsd,3
+akshat,4
+Aditya,2
+Akshat,0
